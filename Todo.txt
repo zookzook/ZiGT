@@ -1,0 +1,9 @@
+* Zu Beginn der App wird die Verbindung getestet.
+* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.
+* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:
+  - Propfind nicht da
+  - Put nicht da
+  - Report nicht da
+  
+  Endet der Request, wird der Status aktualisiert.
+  

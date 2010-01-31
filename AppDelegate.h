@@ -1,11 +1,3 @@
-//
-//  ZiGT_AppDelegate.h
-//  ZiGT
-//
-//  Created by Michael Maier on 15.01.10.
-//  Copyright VIVAI Software AG 2010 . All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 #import "Configs.h"
 
@@ -32,6 +24,8 @@
     NSMutableSet                 *runningPutRequests;
     NSPanel                      *extraPanel;
     NSDate                       *startedAt;
+    NSImageView                  *connectionProblems;
+    NSImageView                  *proxyAccountsNotFound;
 }
 
 @property (nonatomic, retain) IBOutlet NSWindow                      *preferencesWindow;
@@ -43,6 +37,8 @@
 @property (nonatomic, retain) IBOutlet NSArrayController             *proxyAccountsController;
 @property (nonatomic, retain) IBOutlet NSTextField                   *nameMenuField;
 @property (nonatomic, retain) IBOutlet NSTableView                   *tableView;
+@property (nonatomic, retain) IBOutlet NSImageView                   *connectionProblems;
+@property (nonatomic, retain) IBOutlet NSImageView                   *proxyAccountsNotFound;
 
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain, readonly) NSManagedObjectModel         *managedObjectModel;
@@ -135,6 +131,7 @@
 - (IBAction)continueChange:(id)sender;
 
 - (IBAction)cancelChange:(id)sender;
+
 
 /**
  * Ist ein Fenster offen?

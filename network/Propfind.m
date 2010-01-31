@@ -6,9 +6,9 @@
 
 @synthesize guid, calendars;
 
-- (id)initWithAccount:(Account *)newAccount forGUID:(NSString*)newGuid delegate:(id)newDelegate {
+- (id)initWithAccount:(Account *)newAccount forGUID:(NSString*)newGuid delegate:(id)newDelegate context:(void *)newContext {
     
-    self= [super initWithAccount:newAccount delegate:newDelegate];
+    self= [super initWithAccount:newAccount delegate:newDelegate context:(void *)newContext];
     if( self ) {
         
         self.guid= newGuid;

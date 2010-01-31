@@ -9,7 +9,7 @@
 @property (nonatomic, retain) IBOutlet NSMutableDictionary *calendars;
 @property (nonatomic, retain) IBOutlet NSString *guid;
 
-- (id)initWithAccount:(Account *)newAccount forGUID:(NSString*)newGuid delegate:(id)newDelegate;
+- (id)initWithAccount:(Account *)newAccount forGUID:(NSString*)newGuid delegate:(id)newDelegate context:(void *)context;
 
 @end
 

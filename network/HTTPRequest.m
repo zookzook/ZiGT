@@ -3,20 +3,22 @@
 
 @implementation HTTPRequest
 
-@synthesize connection, data, response, account, delegate;
+@synthesize connection, data, response, account, delegate, context;
 
 - (NSString*)method {
     
     return @"GET";
 }
 
-- (id)initWithAccount:(Account *)newAccount delegate:(id)newDelegate {
+- (id)initWithAccount:(Account *)newAccount delegate:(id)newDelegate context:(void *)newContext {
+    
     
     self= [super init];
     if( self ) {
         
         self->delegate  = newDelegate;
         self.account    = newAccount;
+        self.context    = newContext;
     } // if
     
     return self;

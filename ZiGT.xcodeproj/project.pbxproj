@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3F4AC22C1107262900BCADA7 /* Put.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AC22B1107262900BCADA7 /* Put.m */; };
+		3F5A466F1114D79C006F6480 /* Alerts.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3F5A466E1114D79C006F6480 /* Alerts.icns */; };
+		3F5A46791114DDFE006F6480 /* alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5A46781114DDFE006F6480 /* alert.png */; };
+		3F5A46DF1114E48A006F6480 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F5A46DE1114E48A006F6480 /* QuartzCore.framework */; };
 		3F5C777C110091BD00911B06 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F7446980DB6B7EA00F9684A /* MainMenu.xib */; };
 		3F5C77E81100A20200911B06 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C77E61100A20200911B06 /* Account.m */; };
 		3F5C78031100CBA500911B06 /* NSManagedObjectContext+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C78021100CBA500911B06 /* NSManagedObjectContext+Additions.m */; };
@@ -55,6 +58,9 @@
 		32CA4F630368D1EE00C91783 /* ZiGT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZiGT_Prefix.pch; sourceTree = "<group>"; };
 		3F4AC22A1107262900BCADA7 /* Put.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Put.h; path = network/Put.h; sourceTree = "<group>"; };
 		3F4AC22B1107262900BCADA7 /* Put.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Put.m; path = network/Put.m; sourceTree = "<group>"; };
+		3F5A466E1114D79C006F6480 /* Alerts.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Alerts.icns; sourceTree = "<group>"; };
+		3F5A46781114DDFE006F6480 /* alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alert.png; path = images/alert.png; sourceTree = "<group>"; };
+		3F5A46DE1114E48A006F6480 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		3F5C774111008DBF00911B06 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3F5C77E51100A20200911B06 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Account.h; path = model/Account.h; sourceTree = "<group>"; };
 		3F5C77E61100A20200911B06 /* Account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Account.m; path = model/Account.m; sourceTree = "<group>"; };
@@ -126,6 +132,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				3F6F10FC1108E85E00F339A8 /* Security.framework in Frameworks */,
 				3F761828110B3A1600EC5476 /* AddressBook.framework in Frameworks */,
+				3F5A46DF1114E48A006F6480 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +154,7 @@
 			children = (
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				3F761827110B3A1600EC5476 /* AddressBook.framework */,
+				3F5A46DE1114E48A006F6480 /* QuartzCore.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -255,6 +263,8 @@
 		3F6ED2A011022DCF00911536 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3F5A46781114DDFE006F6480 /* alert.png */,
+				3F5A466E1114D79C006F6480 /* Alerts.icns */,
 				3F6ED29E11022DCB00911536 /* pause.png */,
 			);
 			name = Images;
@@ -316,7 +326,7 @@
 			);
 			buildRules = (
 			);
-			comments = "* Zu Beginn der App wird die Verbindung getestet.\n* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.\n* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:\n  - Propfind nicht da\n  - Put nicht da\n  - Report nicht da\n  \n  Endet der Request, wird der Status aktualisiert.\n  ";
+			comments = "* Zu Beginn der App wird die Verbindung getestet.\n* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.\n* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:\n  - Propfind nicht da\n  - Put nicht da\n  - Report nicht da\n  \n  Endet der Request, wird der Status aktualisiert.\n  \n\nPUT muss noch verallgemeinert werden.\n";
 			dependencies = (
 			);
 			name = ZiGT;
@@ -353,6 +363,8 @@
 				3F76186F110B433200EC5476 /* Localizable.strings in Resources */,
 				3F80E1EB110F60490099DBD5 /* zigt.icns in Resources */,
 				3FD4D8D9111485F500133C25 /* Todo.txt in Resources */,
+				3F5A466F1114D79C006F6480 /* Alerts.icns in Resources */,
+				3F5A46791114DDFE006F6480 /* alert.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

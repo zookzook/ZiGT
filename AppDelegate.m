@@ -1,3 +1,4 @@
+#import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 #import "NSManagedObjectContext+Additions.h"
 #import "Account+Logic.h"
@@ -11,15 +12,19 @@
 #import "ProxyAccount.h"
 #import "Task+Logic.h"
 
+#define kAnimationKey @"transitionViewAnimation"
+
 @implementation AppDelegate
 
 @synthesize preferencesWindow, extraPanel, accountController, projectsController, statusItem, nameMenuField;
 @synthesize tableView, animationTimer, putTimer,  status, runningPutRequests, statusController, startedAt;
-@synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts;
+@synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts, connectionProblems, proxyAccountsNotFound;
 
 static NSString *PropertyObservationContext;
 static NSString *ProxyAccountsObservationContext;
 static NSString *StatusObservationContext;
+static NSString* CheckConnectionContext;
+static NSString* LoadProxyAccountsContext;
 
 typedef enum {
     
@@ -176,6 +181,7 @@ typedef enum {
     // Put-Timer starten
     self.putTimer= [NSTimer scheduledTimerWithTimeInterval:[self.status.pushToServerTimeinterval intValue]*60 target:self selector:@selector(putTimerFired:) userInfo:nil repeats:YES];
 
+    [self checkConnection:self];
 }
 
 #pragma mark TabView-Delegate
@@ -191,27 +197,38 @@ typedef enum {
 
         [self.visibleCalendarsController prepareContent];
     } // if 
-
 }
 
 - (void)proxiesFound:(Report*) reportRequest {
     
     Account* acc= [self.accountController content];
     [acc mergeProxies:reportRequest.proxies];
-    [reportRequest release];
     [self saveAction:self];
     
     for( ProxyAccount* pa in acc.proxyAccounts ) {
         
-        Propfind* pf= [[[Propfind alloc] initWithAccount:acc forGUID:pa.guid delegate:pa] autorelease];
+        Propfind* pf= [[[Propfind alloc] initWithAccount:acc forGUID:pa.guid delegate:pa context:NULL] autorelease];
         [pf run];
     } // for 
 
+    if( reportRequest.context == &LoadProxyAccountsContext ) {
+        
+        [[self.proxyAccountsNotFound animator] setAlphaValue:0];
+        [self.proxyAccountsNotFound setToolTip:nil];
+    } // if 
+    
+    [reportRequest release];
 }
 
 - (void)proxiesNotFound:(Report*) reportRequest {
     
-    NSLog( @"Proxies not found..." );
+    if( reportRequest.context == &LoadProxyAccountsContext ) {
+        
+        [[self.proxyAccountsNotFound animator] setAlphaValue:1];
+        [self.proxyAccountsNotFound setToolTip:@"Keine Stellvertreter gefunden!"];
+    } // if 
+
+    [reportRequest release];
 }
 
 #pragma mark Window-Delegate
@@ -481,8 +498,22 @@ typedef enum {
  */
 - (IBAction)checkConnection:(id)sender {
         
-    Propfind* propfind= [[[Propfind alloc] initWithAccount:self.accountController.content delegate:self] autorelease];
+    [self.managedObjectContext commitEditing];
+    Account* acc= self.accountController.content;
+    Propfind* propfind= [[[Propfind alloc] initWithAccount:acc forGUID:acc.username delegate:self context:&CheckConnectionContext] autorelease];
     [propfind run];    
+}
+
+- (void)calendarsNotFound:(Propfind*)reportRequest {
+        
+    if( reportRequest.context == &CheckConnectionContext )
+        [[self.connectionProblems animator] setAlphaValue:1];
+}
+
+- (void)calendarsFound:(Propfind*) reportRequest {
+    
+    if( reportRequest.context == &CheckConnectionContext )
+        [[self.connectionProblems animator] setAlphaValue:0];
 }
 
 /**
@@ -530,7 +561,7 @@ typedef enum {
  */
 - (IBAction)refreshProxyAccounts:(id)sender {
     
-    Report* report= [[Report alloc] initWithAccount:self.accountController.content delegate:self];
+    Report* report= [[Report alloc] initWithAccount:self.accountController.content delegate:self context:&LoadProxyAccountsContext];
     [report run];    
 }
 
@@ -689,11 +720,11 @@ typedef enum {
             statusTitle= self.status.currentProject.menuName;
         } // if 
         [statusItem setTitle: statusTitle];
-        // NSImage* stateImage= [NSImage imageNamed:@"pause"];
-        // [statusItem setImage:stateImage];
-        
+        NSImage* stateImage= [NSImage imageNamed:@"alert"];
+        [statusItem setImage:stateImage];        
     } // else 
 }
+
 
 /**
  * Zeitanzeige aktualisieren...
@@ -859,6 +890,8 @@ typedef enum {
     self.animationTimer            = nil;
     self.status                    = nil;
     self.statusController          = nil;
+    self.proxyAccountsNotFound     = nil;
+    self.connectionProblems        = nil;
     
     [super dealloc];
 }

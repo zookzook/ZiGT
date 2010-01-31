@@ -35,6 +35,27 @@
 }
 
 /**
+ * Liefert die Dauer formatiert zurück.
+ */
+- (NSString*)timeIntervalDescription:(NSDate*)now {
+    
+    static NSDateFormatter* _formatter;
+    
+    if( !_formatter ) {
+        
+        _formatter = [[NSDateFormatter alloc] init];
+        [_formatter setDateFormat:@"HH:mm:ss"];        
+    } // if 
+    
+    if( !now )
+        now= [NSDate date];                        
+    
+    NSTimeInterval diffTime= [now timeIntervalSinceReferenceDate] - [self.startedAt timeIntervalSinceReferenceDate] - [[NSTimeZone defaultTimeZone] secondsFromGMT];
+    NSDate*           diffDate= [NSDate dateWithTimeIntervalSinceReferenceDate:diffTime];            
+    return [NSString stringWithFormat:NSLocalizedString( @"Duration %@", @"StopWatch" ), [_formatter stringFromDate:diffDate]];
+}
+
+/**
  * Erzeugt den VCalendar-Eintrag.
  */
 - (NSString *)vcalendar {
@@ -71,7 +92,7 @@
     [result appendFormat:@"UID:%@\r\n", [self uuid]];
     [result appendFormat:@"DTSTAMP:%@\r\n", now ];
     [result appendFormat:@"CREATED:%@\r\n", now ];
-    [result appendFormat:@"SUMMARY:%@\r\n", [self.project summary]];
+    [result appendFormat:@"SUMMARY:%@\r\n", [self.project summaryForEntry:self]];
     
     if( self.info )
         [result appendFormat:@"DESCRIPTION:%@\r\n", self.info ];

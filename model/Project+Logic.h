@@ -22,7 +22,7 @@
 
 - (void)stop:(Entry *)newEntry;
 
-- (NSString*)summary;
+- (NSString*)summaryForEntry:(Entry*)entry;
 
 - (BOOL)hasConnectivity;
 

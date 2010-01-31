@@ -23,6 +23,11 @@
 - (NSTimeInterval)timeInterval;
 
 /**
+ * Formatierte Zeitausgabe zwischen Start und Ende.
+ */
+- (NSString*)timeIntervalDescription:(NSDate*)now;
+
+/**
  * Zeiten werden gerundet bzgl. der Minutenzahl:
  * Startzeit wird abgerundet, so dass minutes ein Teiler ist
  * Endzeit wird aufgerundet, so dass minutes ein Teiler ist

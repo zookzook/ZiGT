@@ -2,7 +2,7 @@
 //  Project.h
 //  ZiGT
 //
-//  Created by Michael Maier on 28.01.10.
+//  Created by Michael Maier on 31.01.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSNumber * active;
 @property (nonatomic, retain) NSNumber * tag;
 @property (nonatomic, retain) NSString * menuName;
+@property (nonatomic, retain) NSString * messageExpression;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) Status * status;
 @property (nonatomic, retain) Task * task;

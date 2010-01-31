@@ -12,7 +12,7 @@
         Task* task= [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:context];
         task.name= NSLocalizedString( @"Implementation", @"Implementation" );
         task= [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:context];
-        task.name= NSLocalizedString( @"Analysis ", @"Analysis" );
+        task.name= NSLocalizedString( @"Analysis", @"Analysis" );
         task= [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:context];
         task.name= NSLocalizedString( @"Design", @"Design" );
         task= [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:context];

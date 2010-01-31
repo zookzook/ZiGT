@@ -26,6 +26,8 @@
     NSDate                       *startedAt;
     NSImageView                  *connectionProblems;
     NSImageView                  *proxyAccountsNotFound;
+    NSTokenField                 *messageExpression;
+    NSTokenField                 *messageExpressionTemplates;
 }
 
 @property (nonatomic, retain) IBOutlet NSWindow                      *preferencesWindow;
@@ -39,6 +41,8 @@
 @property (nonatomic, retain) IBOutlet NSTableView                   *tableView;
 @property (nonatomic, retain) IBOutlet NSImageView                   *connectionProblems;
 @property (nonatomic, retain) IBOutlet NSImageView                   *proxyAccountsNotFound;
+@property (nonatomic, retain) IBOutlet NSTokenField                  *messageExpression;
+@property (nonatomic, retain) IBOutlet NSTokenField                  *messageExpressionTemplates;
 
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain, readonly) NSManagedObjectModel         *managedObjectModel;

@@ -11,6 +11,9 @@
 #import "Report.h"
 #import "ProxyAccount.h"
 #import "Task+Logic.h"
+#import "MessageToken.h"
+#import "NSArray+Utils.h"
+#import "MessageTokenTransformer.h"
 
 #define kAnimationKey @"transitionViewAnimation"
 
@@ -19,6 +22,7 @@
 @synthesize preferencesWindow, extraPanel, accountController, projectsController, statusItem, nameMenuField;
 @synthesize tableView, animationTimer, putTimer,  status, runningPutRequests, statusController, startedAt;
 @synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts, connectionProblems, proxyAccountsNotFound;
+@synthesize messageExpression, messageExpressionTemplates;
 
 static NSString *PropertyObservationContext;
 static NSString *ProxyAccountsObservationContext;
@@ -40,6 +44,12 @@ typedef enum {
 } MENU_TAG;
 
 #pragma mark CoreData
+
++ (void) initialize {
+    
+    MessageTokenTransformer* mtt = [[[MessageTokenTransformer alloc] init] autorelease];
+    [NSValueTransformer setValueTransformer:mtt forName:@"MessageTokenTransformer"];
+}
 
 /**
  * Returns the support directory for the application, used to store the Core Data
@@ -182,6 +192,9 @@ typedef enum {
     self.putTimer= [NSTimer scheduledTimerWithTimeInterval:[self.status.pushToServerTimeinterval intValue]*60 target:self selector:@selector(putTimerFired:) userInfo:nil repeats:YES];
 
     [self checkConnection:self];
+    
+    [self.messageExpression setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"^"]];
+    [self.messageExpressionTemplates setObjectValue:[MessageToken possibleMessageTokens]];
 }
 
 #pragma mark TabView-Delegate
@@ -321,12 +334,7 @@ typedef enum {
                 
                 if( [self.status isRunning]  ) {
                     
-                    NSDate*           now= [NSDate date];                        
-                    NSTimeInterval diffTime= [now timeIntervalSinceReferenceDate] - [self.startedAt timeIntervalSinceReferenceDate] - [[NSTimeZone defaultTimeZone] secondsFromGMT];
-                    NSDate*           diffDate= [NSDate dateWithTimeIntervalSinceReferenceDate:diffTime];            
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"HH:mm:ss"];
-                    [menuItem setTitle: [NSString stringWithFormat:NSLocalizedString( @"Duration %@", @"StopWatch" ), [formatter stringFromDate:diffDate]]];
+                    [menuItem setTitle: [self.status.entry timeIntervalDescription:nil]];
                 } // if 
                 else {
                     [menuItem setTitle: NSLocalizedString( @"Durcation 00:00:00", @"StopWatch" )];                    
@@ -363,6 +371,7 @@ typedef enum {
     
     [self.projectsController add:sender];    
     [self performSelector:@selector(scrollTableView:) withObject:nil afterDelay:0];
+    NSLog( @"Aktueller wert: %@", [self.messageExpression objectValue] );
 }
 
 /**
@@ -858,6 +867,63 @@ typedef enum {
 	} // for     
 }
 
+#pragma mark NSTokenField-Delegate
+
+- (NSTokenStyle)tokenField:(NSTokenField *)tokenField styleForRepresentedObject:(id)representedObject {
+    
+    NSTokenStyle result= NSPlainTextTokenStyle;
+    if( self.messageExpression == tokenField ) {        
+        if( [representedObject isKindOfClass:[MessageToken class]] )
+            result= NSRoundedTokenStyle;
+    } // if
+    else 
+        result= NSRoundedTokenStyle;
+
+    return result;
+}
+
+- (NSString *)tokenField:(NSTokenField *)tokenField displayStringForRepresentedObject:(id)representedObject {
+
+    NSString* result= nil;
+    if( [representedObject isKindOfClass:[MessageToken class]] ) {
+        
+        result= ((MessageToken*)representedObject).token;
+        result= NSLocalizedString( result, "" );
+    } // if 
+    
+    return result;
+}
+
+- (id)tokenField:(NSTokenField *)tokenField representedObjectForEditingString: (NSString *)editingString {
+    
+    return [MessageToken findMessageTokenForString:editingString];
+}
+
+- (BOOL)tokenField:(NSTokenField *)tokenField writeRepresentedObjects:(NSArray *)objects toPasteboard:(NSPasteboard *)pboard {
+        
+    objects= [objects map:^(id tm){ return (id)[tm token]; }];
+    [pboard writeObjects:objects];
+    
+    return YES;
+}
+- (NSArray *)tokenField:(NSTokenField *)tokenField readFromPasteboard:(NSPasteboard *)pboard {
+    
+    static NSArray* _classes;
+    if( !_classes ) {
+        _classes= [[NSArray alloc] initWithObjects:[NSString class],nil];
+    } // if
+    
+    NSArray* result= [[pboard readObjectsForClasses:_classes options:[NSDictionary dictionary]] map:^(id object) { 
+        
+        id tempResult= [MessageToken findMessageTokenForString:object];
+        if( !tempResult )
+            tempResult= object;
+        return tempResult;
+    }];
+    
+    return result;
+}
+
 /**
  Implementation of dealloc, to release the retained variables.
  */
@@ -892,6 +958,7 @@ typedef enum {
     self.statusController          = nil;
     self.proxyAccountsNotFound     = nil;
     self.connectionProblems        = nil;
+    self.messageExpression         = nil;
     
     [super dealloc];
 }

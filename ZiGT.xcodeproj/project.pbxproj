@@ -24,6 +24,8 @@
 		3F80E263110F71DF0099DBD5 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F80E260110F71DF0099DBD5 /* Task.m */; };
 		3F80E273110F79890099DBD5 /* NSXMLDocument+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F80E272110F79890099DBD5 /* NSXMLDocument+Utils.m */; };
 		3F80E2D6110F7FA90099DBD5 /* Account+Logic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F80E2D5110F7FA90099DBD5 /* Account+Logic.m */; };
+		3F8137EB11161C20001B4C61 /* MessageToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8137EA11161C20001B4C61 /* MessageToken.m */; };
+		3F8138B311162B72001B4C61 /* MessageTokenTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8138B211162B72001B4C61 /* MessageTokenTransformer.m */; };
 		3F81E198110CAC5900352111 /* HTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F81E197110CAC5900352111 /* HTTPRequest.m */; };
 		3F86CAA911063EFC002EA155 /* Project+Logic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F86CAA811063EFC002EA155 /* Project+Logic.m */; };
 		3F9F20201112208A00879599 /* Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9F20161112208A00879599 /* Calendar.m */; };
@@ -82,6 +84,10 @@
 		3F80E272110F79890099DBD5 /* NSXMLDocument+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSXMLDocument+Utils.m"; path = "utils/NSXMLDocument+Utils.m"; sourceTree = "<group>"; };
 		3F80E2D4110F7FA90099DBD5 /* Account+Logic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Account+Logic.h"; path = "model/Account+Logic.h"; sourceTree = "<group>"; };
 		3F80E2D5110F7FA90099DBD5 /* Account+Logic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Account+Logic.m"; path = "model/Account+Logic.m"; sourceTree = "<group>"; };
+		3F8137E911161C20001B4C61 /* MessageToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageToken.h; path = utils/MessageToken.h; sourceTree = "<group>"; };
+		3F8137EA11161C20001B4C61 /* MessageToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageToken.m; path = utils/MessageToken.m; sourceTree = "<group>"; };
+		3F8138B111162B72001B4C61 /* MessageTokenTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageTokenTransformer.h; path = utils/MessageTokenTransformer.h; sourceTree = "<group>"; };
+		3F8138B211162B72001B4C61 /* MessageTokenTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageTokenTransformer.m; path = utils/MessageTokenTransformer.m; sourceTree = "<group>"; };
 		3F81E196110CAC5900352111 /* HTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTPRequest.h; path = network/HTTPRequest.h; sourceTree = "<group>"; };
 		3F81E197110CAC5900352111 /* HTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTTPRequest.m; path = network/HTTPRequest.m; sourceTree = "<group>"; };
 		3F86CAA711063EFC002EA155 /* Project+Logic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Project+Logic.h"; path = "model/Project+Logic.h"; sourceTree = "<group>"; };
@@ -256,6 +262,10 @@
 				3FAA17A6110E200500693A3B /* NSArray+Utils.m */,
 				3F80E271110F79890099DBD5 /* NSXMLDocument+Utils.h */,
 				3F80E272110F79890099DBD5 /* NSXMLDocument+Utils.m */,
+				3F8137E911161C20001B4C61 /* MessageToken.h */,
+				3F8137EA11161C20001B4C61 /* MessageToken.m */,
+				3F8138B111162B72001B4C61 /* MessageTokenTransformer.h */,
+				3F8138B211162B72001B4C61 /* MessageTokenTransformer.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -326,7 +336,7 @@
 			);
 			buildRules = (
 			);
-			comments = "* Zu Beginn der App wird die Verbindung getestet.\n* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.\n* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:\n  - Propfind nicht da\n  - Put nicht da\n  - Report nicht da\n  \n  Endet der Request, wird der Status aktualisiert.\n  \n\nPUT muss noch verallgemeinert werden.\n";
+			comments = "* Zu Beginn der App wird die Verbindung getestet.\n* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.\n* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:\n  - Propfind nicht da\n  - Put nicht da\n  - Report nicht da\n  \n  Endet der Request, wird der Status aktualisiert.\n  \n\n* PUT muss noch verallgemeinert werden.\n* Falls der Request zu lange dauert, muss ein Idle-Symbol erscheinen...\n* Tooltip für die Fehlermeldungen...";
 			dependencies = (
 			);
 			name = ZiGT;
@@ -402,6 +412,8 @@
 				3F9F20C911122AF200879599 /* Calendar+Logic.m in Sources */,
 				3F9F21301112433600879599 /* Task+Logic.m in Sources */,
 				3F73E39E11134E9A004136CE /* DataModel.xcdatamodel in Sources */,
+				3F8137EB11161C20001B4C61 /* MessageToken.m in Sources */,
+				3F8138B311162B72001B4C61 /* MessageTokenTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -5,6 +5,8 @@
 #import "Calendar.h"
 #import "Task.h"
 #import "ProxyAccount.h"
+#import "MessageToken.h"
+#import "NSArray+Utils.h"
 
 @implementation Project( Logic )
 
@@ -74,22 +76,49 @@
     [self addEntriesObject:newEntry];    
 }
 
-- (NSString*)summary {
+- (NSString*)summaryForEntry:(Entry*)entry {
     
-    ABAddressBook*       ab= [ABAddressBook sharedAddressBook];
-    ABPerson*            me= [ab me];
-    NSString*     firstname= [me valueForProperty:kABFirstNameProperty];
-    NSString*     lastname= [me valueForProperty:kABLastNameProperty];
-    NSString*       result= nil;
+    NSArray* tokens= [self.messageExpression componentsSeparatedByString:@"^"];
+    NSMutableString* result= [NSMutableString string];
+    for( NSString* token in tokens ) {
+        
+        MessageToken* mt= [MessageToken findMessageTokenForString:token];
+        if( mt ) {
+            
+            if( [mt.token isEqualToString:@"@User@"] ) {
+                
+                ABAddressBook*       ab= [ABAddressBook sharedAddressBook];
+                ABPerson*            me= [ab me];
+                NSString*     firstname= [me valueForProperty:kABFirstNameProperty];
+                NSString*     lastname= [me valueForProperty:kABLastNameProperty];
+                
+                if( firstname )
+                    [result appendFormat:@"%@ %@", firstname, lastname];
+                else
+                    if( lastname )
+                        [result appendString:lastname];
+            } // if 
+            else
+            if( [mt.token isEqualToString:@"@Project@"] ) {
+                
+                [result appendString:self.name];
+            } // if
+            else
+                if( [mt.token isEqualToString:@"@Task@"] ) {
+                    
+                    [result appendString:self.task.name];
+                } // if
+                else
+                    if( [mt.token isEqualToString:@"@Time@"] ) {
+                        
+                        [result appendString:[entry timeIntervalDescription:entry.finishedAt]];
+                    } // if
+            
+        } // if 
+        else
+            [result appendString:token];
+    } // for 
     
-    if( firstname )
-        result= [NSString stringWithFormat:@"%@ %@: %@ | %@", firstname, lastname, self.name, self.task.name];
-    else
-    if( lastname )
-        result= [NSString stringWithFormat:@"%@: %@ | %@", lastname, self.name, self.task.name];
-    else
-        result= [NSString stringWithFormat:@"%@ | %@", self.name, self.task.name];
-
     return result;
 }
 

@@ -1,6 +1,7 @@
 #import "Status+Logic.h"
 #import "Project.h"
 #import "Entry.h"
+#import "Task.h"
 
 @implementation Status( Logic )
 
@@ -14,7 +15,7 @@
     return [self.state intValue] == RUNNING;
 }
 
-- (void)startProject:(Project *)newProject {
+- (void)startProject:(Project *)newProject withTask:(Task*)newTask {
 
     // wird das Project gewechselt, dann aktualisieren wir das alte.
     if( self.currentProject != newProject ) {
@@ -42,13 +43,14 @@
     
     self.state= [NSNumber numberWithInt:RUNNING];
     
-    NSLog( @"Messung für %@ gestartet...", self.currentProject );
     self.entry.project= self.currentProject;
+    self.entry.task   = newTask;
+    NSLog( @"Starte Project %@ mit Task %@", self.currentProject, self.entry.task );
 }
 
 - (void)restart {
     
-    [self startProject:self.currentProject];
+    [self startProject:self.currentProject withTask:self.entry.task];
 }
 
 - (void)stop {

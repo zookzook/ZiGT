@@ -2,7 +2,7 @@
 //  ProxyAccount.h
 //  ZiGT
 //
-//  Created by Michael Maier on 28.01.10.
+//  Created by Michael Maier on 05.02.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -15,9 +15,9 @@
 {
 }
 
-@property (nonatomic, retain) NSNumber * visible;
-@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * guid;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * visible;
 @property (nonatomic, retain) Account * account;
 @property (nonatomic, retain) NSSet* calendars;
 

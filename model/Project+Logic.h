@@ -22,8 +22,6 @@
 
 - (void)stop:(Entry *)newEntry;
 
-- (NSString*)summaryForEntry:(Entry*)entry;
-
 - (BOOL)hasConnectivity;
 
 @end

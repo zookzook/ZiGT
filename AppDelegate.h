@@ -28,6 +28,7 @@
     NSImageView                  *proxyAccountsNotFound;
     NSTokenField                 *messageExpression;
     NSTokenField                 *messageExpressionTemplates;
+    NSMenuItem                   *highlightedMenuItem;
 }
 
 @property (nonatomic, retain) IBOutlet NSWindow                      *preferencesWindow;
@@ -54,6 +55,7 @@
 @property (nonatomic, retain)           NSMutableSet                 *runningPutRequests;
 @property (nonatomic, retain)           NSDate                       *startedAt;
 @property (nonatomic, retain)           NSArray                      *oldProxyAccounts;
+@property (nonatomic, retain)           NSMenuItem                   *highlightedMenuItem;
 
 - (IBAction)saveAction:sender;
 

@@ -1,5 +1,7 @@
 #import "Status.h"
 
+@class Project, Task;
+
 typedef enum {
     
     STOPPED= 0,
@@ -11,7 +13,7 @@ typedef enum {
 
 - (void)awakeFromInsert;
 - (BOOL)isRunning;
-- (void)startProject:(Project *)newProject;
+- (void)startProject:(Project *)newProject withTask:(Task*)newTask;
 - (void)restart;
 - (void)stop;
 

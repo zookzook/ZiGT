@@ -2,7 +2,7 @@
 //  Account.m
 //  ZiGT
 //
-//  Created by Michael Maier on 28.01.10.
+//  Created by Michael Maier on 05.02.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -12,8 +12,9 @@
 
 @implementation Account 
 
-@dynamic url;
 @dynamic username;
+@dynamic url;
 @dynamic proxyAccounts;
 @synthesize password;
+
 @end

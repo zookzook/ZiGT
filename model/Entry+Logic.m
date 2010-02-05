@@ -1,7 +1,13 @@
+#import <AddressBook/AddressBook.h>
 #import "Entry+Logic.h"
 #import "Project+Logic.h"
 #import "NSDate+Utils.h"
 #import "NSString+Utils.h"
+#import "Calendar.h"
+#import "Task.h"
+#import "ProxyAccount.h"
+#import "MessageToken.h"
+#import "NSArray+Utils.h"
 
 @implementation Entry( Logic )
 
@@ -72,6 +78,52 @@
     return result;
 }
 
+-(NSString*)summary {
+    
+    NSArray* tokens= [self.project.messageExpression componentsSeparatedByString:@"^"];
+    NSMutableString* result= [NSMutableString string];
+    for( NSString* token in tokens ) {
+        
+        MessageToken* mt= [MessageToken findMessageTokenForString:token];
+        if( mt ) {
+            
+            if( [mt.token isEqualToString:@"@User@"] ) {
+                
+                ABAddressBook*       ab= [ABAddressBook sharedAddressBook];
+                ABPerson*            me= [ab me];
+                NSString*     firstname= [me valueForProperty:kABFirstNameProperty];
+                NSString*     lastname= [me valueForProperty:kABLastNameProperty];
+                
+                if( firstname )
+                    [result appendFormat:@"%@ %@", firstname, lastname];
+                else
+                    if( lastname )
+                        [result appendString:lastname];
+            } // if 
+            else
+                if( [mt.token isEqualToString:@"@Project@"] ) {
+                    
+                    [result appendString:self.project.name];
+                } // if
+                else
+                    if( [mt.token isEqualToString:@"@Task@"] ) {
+                        
+                        [result appendString:self.task.displayName];
+                    } // if
+                    else
+                        if( [mt.token isEqualToString:@"@Time@"] ) {
+                            
+                            [result appendString:[self timeIntervalDescription:self.finishedAt]];
+                        } // if
+            
+        } // if 
+        else
+            [result appendString:token];
+    } // for 
+    
+    return result;
+}
+
 /**
  * Erzeugt den VEVENT-Eintrag.
  */
@@ -92,7 +144,7 @@
     [result appendFormat:@"UID:%@\r\n", [self uuid]];
     [result appendFormat:@"DTSTAMP:%@\r\n", now ];
     [result appendFormat:@"CREATED:%@\r\n", now ];
-    [result appendFormat:@"SUMMARY:%@\r\n", [self.project summaryForEntry:self]];
+    [result appendFormat:@"SUMMARY:%@\r\n", [self summary]];
     
     if( self.info )
         [result appendFormat:@"DESCRIPTION:%@\r\n", self.info ];
@@ -103,6 +155,7 @@
 
     return result;    
 }
+
 
 /**
  * Zeiten werden gerundet bzgl. der Minutenzahl:

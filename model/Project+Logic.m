@@ -76,52 +76,6 @@
     [self addEntriesObject:newEntry];    
 }
 
-- (NSString*)summaryForEntry:(Entry*)entry {
-    
-    NSArray* tokens= [self.messageExpression componentsSeparatedByString:@"^"];
-    NSMutableString* result= [NSMutableString string];
-    for( NSString* token in tokens ) {
-        
-        MessageToken* mt= [MessageToken findMessageTokenForString:token];
-        if( mt ) {
-            
-            if( [mt.token isEqualToString:@"@User@"] ) {
-                
-                ABAddressBook*       ab= [ABAddressBook sharedAddressBook];
-                ABPerson*            me= [ab me];
-                NSString*     firstname= [me valueForProperty:kABFirstNameProperty];
-                NSString*     lastname= [me valueForProperty:kABLastNameProperty];
-                
-                if( firstname )
-                    [result appendFormat:@"%@ %@", firstname, lastname];
-                else
-                    if( lastname )
-                        [result appendString:lastname];
-            } // if 
-            else
-            if( [mt.token isEqualToString:@"@Project@"] ) {
-                
-                [result appendString:self.name];
-            } // if
-            else
-                if( [mt.token isEqualToString:@"@Task@"] ) {
-                    
-                    [result appendString:self.task.name];
-                } // if
-                else
-                    if( [mt.token isEqualToString:@"@Time@"] ) {
-                        
-                        [result appendString:[entry timeIntervalDescription:entry.finishedAt]];
-                    } // if
-            
-        } // if 
-        else
-            [result appendString:token];
-    } // for 
-    
-    return result;
-}
-
 - (BOOL)hasConnectivity {
     
     return self.calendar.guid != nil;

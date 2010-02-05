@@ -2,7 +2,7 @@
 //  Account.h
 //  ZiGT
 //
-//  Created by Michael Maier on 28.01.10.
+//  Created by Michael Maier on 05.02.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -15,8 +15,8 @@
     NSString* password;
 }
 
-@property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * password;
 @property (nonatomic, retain) NSSet* proxyAccounts;
 
@@ -30,4 +30,3 @@
 - (void)removeProxyAccounts:(NSSet *)value;
 
 @end
-

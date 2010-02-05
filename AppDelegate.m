@@ -22,7 +22,7 @@
 @synthesize preferencesWindow, extraPanel, accountController, projectsController, statusItem, nameMenuField;
 @synthesize tableView, animationTimer, putTimer,  status, runningPutRequests, statusController, startedAt;
 @synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts, connectionProblems, proxyAccountsNotFound;
-@synthesize messageExpression, messageExpressionTemplates;
+@synthesize messageExpression, messageExpressionTemplates, highlightedMenuItem;
 
 static NSString *PropertyObservationContext;
 static NSString *ProxyAccountsObservationContext;
@@ -195,6 +195,10 @@ typedef enum {
     
     [self.messageExpression setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"^"]];
     [self.messageExpressionTemplates setObjectValue:[MessageToken possibleMessageTokens]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(menuDidSendAction:)
+                                                 name:NSMenuDidSendActionNotification object:nil];
 }
 
 #pragma mark TabView-Delegate
@@ -343,11 +347,52 @@ typedef enum {
             } // if 
         }
         
-        [menuItem setState: (self.status.currentProject != nil && [self.status.currentProject.tag intValue] == [menuItem tag])];
-
+        id object= [menuItem representedObject];        
+        if( object ) {
+            
+            if( [object isKindOfClass:[Project class]] ) {
+                Project* p= (Project*)object;
+                [menuItem setState: self.status.currentProject == p];                
+            } // if
+            else 
+            if( [object isKindOfClass:[Task class]] ) {
+                
+                Task* t= (Task*)object;
+                Project* p= [[(NSMenuItem*)menuItem parentItem] representedObject];
+                [menuItem setState:self.status.currentProject == p && self.status.entry && self.status.entry.task == t];
+            } // if 
+        } // if 
+        
     } // else
     
+
     return result;
+}
+
+- (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)menuItem {
+
+    if( self.highlightedMenuItem ) {
+        
+        Task* t= [self.highlightedMenuItem representedObject];        
+        [self.highlightedMenuItem setImage:[t menuItemImage]];
+        self.highlightedMenuItem= nil;
+    } // if
+
+    if( [menuItem representedObject] ) {
+        
+        if( [[menuItem representedObject] isKindOfClass:[Task class]] ) {
+            
+            Task* t= [menuItem representedObject];        
+            
+            [menuItem setImage:[t highlightedMenuItemImage]];    
+            self.highlightedMenuItem= menuItem;
+        } // if 
+    } // if     
+}
+
+- (void)menuDidSendAction:(NSNotification*)notification {
+    
+    [self menu:nil willHighlightItem:nil];
 }
 
 # pragma mark IBActions
@@ -468,18 +513,23 @@ typedef enum {
     
     [self stopRecording:self];
     
-    Project* newProject= [Project projectByTag:[sender tag] context:self.managedObjectContext];
-    if( newProject ) {
+    if( sender ) {
+
         
-        self.startedAt= [NSDate date];
-        [self.status startProject:newProject];
-        if( [self.status.rounding boolValue] ) {
+        Task* t= [(NSMenuItem*)sender representedObject];
+        Project* newProject= [[(NSMenuItem*)sender parentItem] representedObject];
+        if( newProject ) {
             
-            [self.status.entry roundBy:[self.status.minTimeinterval intValue]];
+            self.startedAt= [NSDate date];
+            [self.status startProject:newProject withTask:t];
+            if( [self.status.rounding boolValue] ) {
+                
+                [self.status.entry roundBy:[self.status.minTimeinterval intValue]];
+            } // if 
+            [self saveAction:self];
+            [self startTimer];            
         } // if 
-        [self saveAction:self];
-        [self startTimer];            
-    } // if 
+    }
 }
 
 - (IBAction)editExtras:(id)sender {
@@ -577,13 +627,36 @@ typedef enum {
 
 # pragma mark misc
 
+- (NSMenu *)taskMenu {
+    
+    NSMenu     *result= [[NSMenu alloc] initWithTitle:@"TaskMenu"];    
+    NSMenuItem *item;
+    
+    NSArray* tasks= [Task tasks:self.managedObjectContext];
+    for( Task* t in tasks ) {
+        
+        item= [[NSMenuItem alloc] initWithTitle:t.displayName action:NULL keyEquivalent:@""];    
+        
+        [item setRepresentedObject:t];
+        [item setTarget:self];
+        [item setAction:@selector(changeProject:)];
+        [item setImage:[t menuItemImage]];    
+        [result addItem:item];
+        [item release];     
+    } // if 
+    
+    [result setDelegate:self];
+    return [result autorelease];
+}
+
+
 /**
  * Liefert das Menü zurück.
  */
 - (NSMenu *)menu {
     
     // das Menü wird hier konstruiert...
-    NSMenu     *result= [[NSMenu alloc] initWithTitle:@"ZiGT"];
+    NSMenu     *result= [[NSMenu alloc] initWithTitle:@"ZiGT"];    
     NSMenuItem *item= [[NSMenuItem alloc] initWithTitle:NSLocalizedString( @"Start", @"Starts current project" ) action:NULL keyEquivalent:@""];
     
     [item setAction:@selector(noop:)];
@@ -618,10 +691,12 @@ typedef enum {
             menuName= NSLocalizedString( @"No name", @"Current project has no name for the menu." );
         
         item= [[NSMenuItem alloc] initWithTitle:menuName action:NULL keyEquivalent:@""];    
+        
+        [item setRepresentedObject:p];
+        [item setSubmenu:[self taskMenu]];
         [item setTarget:self];
-        [item setAction:@selector(changeProject:)];
+        [item setAction:@selector(noop:)];
         [item setState:[p.active boolValue] ? NSOnState : NSOffState ];
-        [item setTag:[p.tag intValue]];
         [result addItem:item];
         [item release];     
     } // if 
@@ -659,8 +734,10 @@ typedef enum {
     [item release];
     
     [result setAutoenablesItems:YES];
+    [result setDelegate:self];
     return [result autorelease];
 }
+
 
 /**
  * Applikation beenden
@@ -720,7 +797,7 @@ typedef enum {
     if( [self.status isRunning] ) {
         
         [statusItem setTitle: self.status.currentProject.menuName];
-        [statusItem setImage: nil]; // todo: Play-Image
+        [statusItem setImage: [NSImage imageNamed:@"zig_icon_statusleiste_running"]];
     } // if
     else {
         
@@ -728,9 +805,8 @@ typedef enum {
         if( self.status.currentProject ) {
             statusTitle= self.status.currentProject.menuName;
         } // if 
-        [statusItem setTitle: statusTitle];
-        NSImage* stateImage= [NSImage imageNamed:@"alert"];
-        [statusItem setImage:stateImage];        
+        [statusItem setTitle: @""];
+        [statusItem setImage: [NSImage imageNamed:@"zig_icon_statusleiste_stopped"]];
     } // else 
 }
 
@@ -959,6 +1035,7 @@ typedef enum {
     self.proxyAccountsNotFound     = nil;
     self.connectionProblems        = nil;
     self.messageExpression         = nil;
+    self.highlightedMenuItem       = nil;
     
     [super dealloc];
 }

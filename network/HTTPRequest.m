@@ -5,11 +5,6 @@
 
 @synthesize connection, data, response, account, delegate, context;
 
-- (NSString*)method {
-    
-    return @"GET";
-}
-
 - (id)initWithAccount:(Account *)newAccount delegate:(id)newDelegate context:(void *)newContext {
     
     
@@ -22,6 +17,11 @@
     } // if
     
     return self;
+}
+
+- (NSString*)method {
+    
+    return @"GET";
 }
 
 - (NSURL*)url {

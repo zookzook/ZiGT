@@ -378,7 +378,7 @@
 			);
 			buildRules = (
 			);
-			comments = "* Zu Beginn der App wird die Verbindung getestet.\n* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.\n* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:\n  - Propfind nicht da\n  - Put nicht da\n  - Report nicht da\n  \n  Endet der Request, wird der Status aktualisiert.\n  \n* PUT muss noch verallgemeinert werden.\n* Falls der Request zu lange dauert, muss ein Idle-Symbol erscheinen...\n* Tooltip für die Fehlermeldungen...\n\n* Status Image zusammenbauen: Logo + Task-Icon -> Icon";
+			comments = "* Zu Beginn der App wird die Verbindung getestet.\n* Kleines Fehlersymbol erscheint, wenn die Verbindung nicht mehr funktioniert.\n* Jede Request-Typ hat eine eigene Verbindung, um unterschiedliche Fehlerquellen anzuzeigen:\n  - Propfind nicht da\n  - Put nicht da\n  - Report nicht da\n  \n  Endet der Request, wird der Status aktualisiert.\n  \n* Falls der Request zu lange dauert, muss ein Idle-Symbol erscheinen...\n* Tooltip für die Fehlermeldungen...\n\n* Status Image zusammenbauen: Logo + Task-Icon -> Icon";
 			dependencies = (
 			);
 			name = ZiGT;
@@ -513,7 +513,7 @@
 				INFOPLIST_FILE = "ZiGT-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ZiGT;
-				PRODUCT_VERSION = 0.9.1;
+				PRODUCT_VERSION = 0.9.2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -529,7 +529,7 @@
 				INFOPLIST_FILE = "ZiGT-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ZiGT;
-				PRODUCT_VERSION = 0.9.1;
+				PRODUCT_VERSION = 0.9.2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

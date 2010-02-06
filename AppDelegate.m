@@ -20,7 +20,7 @@
 @implementation AppDelegate
 
 @synthesize preferencesWindow, extraPanel, accountController, projectsController, statusItem, nameMenuField;
-@synthesize tableView, animationTimer, putTimer,  status, runningPutRequests, statusController, startedAt;
+@synthesize tableView, putTimer,  status, runningPutRequests, statusController, startedAt;
 @synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts, connectionProblems, proxyAccountsNotFound;
 @synthesize messageExpression, messageExpressionTemplates, highlightedMenuItem;
 
@@ -29,6 +29,7 @@ static NSString *ProxyAccountsObservationContext;
 static NSString *StatusObservationContext;
 static NSString* CheckConnectionContext;
 static NSString* LoadProxyAccountsContext;
+static NSString* PutEntryContext;
 
 typedef enum {
     
@@ -438,7 +439,6 @@ typedef enum {
 - (IBAction)stopRecording:sender {
     
     [self.status stop];
-    [self stopTimer];
         
     Entry* theEntry= self.status.entry;
     
@@ -497,7 +497,6 @@ typedef enum {
             self.startedAt= [NSDate date];
             [self.status startProject:p withTask:t];
             [self saveAction:self];
-            [self startTimer];            
         } // if 
     }
 }
@@ -556,7 +555,7 @@ typedef enum {
         
         if( [e hasConnectivity] ) {
             
-            Put* putRequest= [Put putEvent:e forAccount:[self.accountController content] delegate:self];
+            Put* putRequest= [Put putWithAccount:[self.accountController content] delegate:self event:e context:&PutEntryContext];
             if( ![self.runningPutRequests containsObject:putRequest] ) {
                 
                 [self.runningPutRequests addObject:putRequest];
@@ -573,7 +572,7 @@ typedef enum {
     if( [self.status isRunning] ) {
         
         if( [self.status.entry hasConnectivity] ) {
-            Put* putRequest= [Put putEvent:self.status.entry forAccount:[self.accountController content] delegate:self];
+            Put* putRequest= [Put putWithAccount:[self.accountController content] delegate:self event:self.status.entry context:&PutEntryContext];
             if( ![self.runningPutRequests containsObject:putRequest] ) {
                 putRequest.recordEvent= YES;
                 [self.runningPutRequests addObject:putRequest];
@@ -593,7 +592,6 @@ typedef enum {
     Report* report= [[Report alloc] initWithAccount:self.accountController.content delegate:self context:&LoadProxyAccountsContext];
     [report run];    
 }
-
 
 # pragma mark misc
 
@@ -742,23 +740,6 @@ typedef enum {
     return [self.preferencesWindow isVisible] || [self.extraPanel isVisible];
 }
 
-#pragma mark Timer
-
-- (void)startTimer {
-    
-    if( !self.animationTimer )        
-        self.animationTimer= [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
-}
-
-- (void)stopTimer {
-    
-    if( self.animationTimer ) {
-        
-        [self.animationTimer invalidate];
-        self.animationTimer= nil;
-    } // if 
-}
-
 /**
  * Aktualisiert je nach Status den updateStatusBar
  */
@@ -766,17 +747,15 @@ typedef enum {
     
     if( [self.status isRunning] ) {
         
-        [statusItem setTitle: self.status.currentProject.menuName];
-        [statusItem setImage: [NSImage imageNamed:@"zig_icon_statusleiste_running"]];
+        [self.statusItem setTitle: @""];
+        [self.statusItem setImage: [self.status runningImage:NO]];
+        [self.statusItem setAlternateImage:[self.status runningImage:YES]];
     } // if
     else {
         
-        NSString* statusTitle= STATUS_BAR_ITEM_TITLE;
-        if( self.status.currentProject ) {
-            statusTitle= self.status.currentProject.menuName;
-        } // if 
-        [statusItem setTitle: @""];
-        [statusItem setImage: [NSImage imageNamed:@"zig_icon_statusleiste_stopped"]];
+        [self.statusItem setTitle: @""];
+        [self.statusItem setImage: [NSImage imageNamed:@"zig_icon_statusleiste_stopped"]];
+        [self.statusItem setAlternateImage:nil];
     } // else 
 }
 
@@ -786,7 +765,7 @@ typedef enum {
  */
 - (void)timerFired:(NSTimer*)timer {
     
-    [self updateStatusBar];
+    // [self updateStatusBar];
 }
 
 /**
@@ -975,7 +954,6 @@ typedef enum {
 
 - (void)dealloc {
     
-    [self.animationTimer invalidate];
     [self.putTimer invalidate];    
 
     [self->managedObjectContext release];
@@ -986,7 +964,6 @@ typedef enum {
     self->persistentStoreCoordinator= nil;
     self->managedObjectModel        = nil;
     
-    self.animationTimer            = nil;    
     self.putTimer                  = nil;    
     self.preferencesWindow         = nil;    
     self.runningPutRequests        = nil;
@@ -998,7 +975,6 @@ typedef enum {
     self.statusItem                = nil;
     self.nameMenuField             = nil;
     self.tableView                 = nil;
-    self.animationTimer            = nil;
     self.status                    = nil;
     self.statusController          = nil;
     self.proxyAccountsNotFound     = nil;

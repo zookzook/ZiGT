@@ -18,7 +18,6 @@
     NSStatusItem                 *statusItem;
     NSTextField                  *nameMenuField;
     NSTableView                  *tableView;    
-    NSTimer                      *animationTimer;
     NSTimer                      *putTimer;
     Status                       *status;
     NSMutableSet                 *runningPutRequests;
@@ -49,7 +48,6 @@
 @property (nonatomic, retain, readonly) NSManagedObjectModel         *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext       *managedObjectContext;
 @property (nonatomic, retain)           NSStatusItem                 *statusItem;
-@property (nonatomic, retain)           NSTimer                      *animationTimer;
 @property (nonatomic, retain)           NSTimer                      *putTimer;
 @property (nonatomic, retain)           Status                       *status;
 @property (nonatomic, retain)           NSMutableSet                 *runningPutRequests;
@@ -138,10 +136,6 @@
  * Ist ein Fenster offen?
  */
 - (BOOL)isWindowOpen;
-
-- (void)startTimer;
-- (void)stopTimer;
-- (void)timerFired:(NSTimer*)timer;
 
 - (void)startObservingProxyAccounts:(NSArray *)accounts;
 - (void)stopObservingProxyAccounts:(NSArray *)accounts;

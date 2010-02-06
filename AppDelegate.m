@@ -317,17 +317,8 @@ typedef enum {
                 result= YES;
             } // if 
             else {
-                
-                [menuItem setTitle:NSLocalizedString( @"Start", @"Starts current project" )];
-                if( self.status.currentProject ) {
-                    [menuItem setAction:@selector(startRecording:)];        
-                    result= YES;
-                } // if 
-                else {
-                    [menuItem setAction:@selector(noop:)];        
                     result= NO;           
                 } // else
-            } // else        
         } // if     
         else
             if( [menuItem tag] == EDIT_EXTRAS_TAG ) {
@@ -352,14 +343,14 @@ typedef enum {
             
             if( [object isKindOfClass:[Project class]] ) {
                 Project* p= (Project*)object;
-                [menuItem setState: self.status.currentProject == p];                
+                [menuItem setState: (self.status.currentProject == p)? NSOnState : NSOffState];                
             } // if
             else 
             if( [object isKindOfClass:[Task class]] ) {
                 
                 Task* t= (Task*)object;
                 Project* p= [[(NSMenuItem*)menuItem parentItem] representedObject];
-                [menuItem setState:self.status.currentProject == p && self.status.entry && self.status.entry.task == t];
+                [menuItem setState:( self.status.currentProject == p && self.status.currentTask == t) ? NSOnState:NSOffState];
             } // if 
         } // if 
         
@@ -416,7 +407,6 @@ typedef enum {
     
     [self.projectsController add:sender];    
     [self performSelector:@selector(scrollTableView:) withObject:nil afterDelay:0];
-    NSLog( @"Aktueller wert: %@", [self.messageExpression objectValue] );
 }
 
 /**
@@ -452,15 +442,18 @@ typedef enum {
         
     Entry* theEntry= self.status.entry;
     
-    if( self.status.currentProject && theEntry ) {
+    if( theEntry ) {
 
         if( [[NSDate date] timeIntervalSinceDate:self.startedAt] >= [self.status.minTimeinterval intValue] * 60 || YES ) {            
             
-            NSLog( @"Eintrag %@ wird gespeichert", theEntry );
             [self.status.currentProject stop:theEntry];            
             if( [self.status.rounding boolValue] ) {                
-                [self.status.entry roundBy:[self.status.minTimeinterval intValue]];
+                
+                NSInteger minutes= [self.status.minTimeinterval intValue];
+                [theEntry roundStartedAtBy:minutes];
+                [theEntry roundFinishedAtBy:minutes];
             } // if                         
+            NSLog( @"Eintrag %@ gespeichert", theEntry );
         } // if
         else {
             NSLog( @"Zeitinterval ist zu klein %f", theEntry.timeInterval );
@@ -471,24 +464,6 @@ typedef enum {
     } // if 
     
     [self saveAction:self];                    
-}
-
-/**
- * Aufzeichnung wird gestartet.
- */
-- (IBAction)startRecording:sender {
-    
-    if( self.status.currentProject ) {
-        
-        self.startedAt= [NSDate date];
-        [self.status restart];        
-        if( [self.status.rounding boolValue] ) {
-            
-            [self.status.entry roundBy:[self.status.minTimeinterval intValue]];
-        } // if 
-        [self saveAction:self];
-        [self startTimer];
-    } // if 
 }
 
 /**
@@ -514,18 +489,13 @@ typedef enum {
     [self stopRecording:self];
     
     if( sender ) {
-
         
         Task* t= [(NSMenuItem*)sender representedObject];
-        Project* newProject= [[(NSMenuItem*)sender parentItem] representedObject];
-        if( newProject ) {
+        Project* p= [[(NSMenuItem*)sender parentItem] representedObject];
+        if( p ) {
             
             self.startedAt= [NSDate date];
-            [self.status startProject:newProject withTask:t];
-            if( [self.status.rounding boolValue] ) {
-                
-                [self.status.entry roundBy:[self.status.minTimeinterval intValue]];
-            } // if 
+            [self.status startProject:p withTask:t];
             [self saveAction:self];
             [self startTimer];            
         } // if 
@@ -841,8 +811,7 @@ typedef enum {
         [self saveAction:self];
     } // if 
     
-    [self.runningPutRequests removeObject:putRequest];
-    
+    [self.runningPutRequests removeObject:putRequest];    
 }
 
 /**

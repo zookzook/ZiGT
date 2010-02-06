@@ -2,7 +2,7 @@
 //  Project.m
 //  ZiGT
 //
-//  Created by Michael Maier on 05.02.10.
+//  Created by Michael Maier on 06.02.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -10,7 +10,6 @@
 
 #import "Calendar.h"
 #import "Entry.h"
-#import "Status.h"
 
 @implementation Project 
 
@@ -19,7 +18,6 @@
 @dynamic menuName;
 @dynamic messageExpression;
 @dynamic name;
-@dynamic status;
 @dynamic calendar;
 @dynamic entries;
 

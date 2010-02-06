@@ -2,7 +2,7 @@
 //  Entry.m
 //  ZiGT
 //
-//  Created by Michael Maier on 05.02.10.
+//  Created by Michael Maier on 06.02.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -16,10 +16,12 @@
 @dynamic stored;
 @dynamic startedAt;
 @dynamic summary;
-@dynamic info;
-@dynamic uuid;
-@dynamic finishedAt;
 @dynamic url;
+@dynamic startedAtRounded;
+@dynamic uuid;
+@dynamic finishedAtRounded;
+@dynamic finishedAt;
+@dynamic info;
 @dynamic task;
 @dynamic project;
 

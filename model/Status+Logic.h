@@ -11,6 +11,9 @@ typedef enum {
 
 @interface Status( Logic )
 
+- (Project*)currentProject;
+- (Task*)currentTask;
+
 - (void)awakeFromInsert;
 - (BOOL)isRunning;
 - (void)startProject:(Project *)newProject withTask:(Task*)newTask;

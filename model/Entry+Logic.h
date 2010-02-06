@@ -34,6 +34,9 @@
  */
 - (void)roundBy:(NSInteger)minutes;
 
+- (void)roundStartedAtBy:(NSInteger)minutes;
+- (void)roundFinishedAtBy:(NSInteger)minutes;
+
 - (BOOL)hasConnectivity;
 
 @end

@@ -133,12 +133,18 @@
     
     NSString* now= [[NSDate date] UTCString];
     
-    [result appendString:@"BEGIN:VEVENT\r\n"];
-    [result appendFormat:@"DTSTART:%@\r\n", [[self startedAt] UTCString]];
+    NSDate* start= self.startedAt;
+    if( self.startedAtRounded )
+        start= self.startedAtRounded;
     
     NSDate* end= self.finishedAt;
+    if( self.finishedAtRounded )
+        end= self.finishedAtRounded;
     if( !end )
         end= [NSDate date];
+        
+    [result appendString:@"BEGIN:VEVENT\r\n"];
+    [result appendFormat:@"DTSTART:%@\r\n", [start UTCString]];
     
     [result appendFormat:@"DTEND:%@\r\n", [end UTCString]];
     [result appendFormat:@"UID:%@\r\n", [self uuid]];
@@ -163,7 +169,7 @@
  * Endzeit wird aufgerundet, so dass minutes ein Teiler ist
  */
 - (void)roundBy:(NSInteger)minutes {
-    
+        
     NSTimeInterval newStartInterval;
     NSTimeInterval startInterval= [self.startedAt timeIntervalSinceReferenceDate];
     NSTimeInterval          base= startInterval - ((NSInteger)startInterval % (minutes * 60));
@@ -192,9 +198,31 @@
     NSLog( @"Finished-At:%@", self.finishedAt );
 }
 
+- (void)roundStartedAtBy:(NSInteger)minutes {
+    
+    self.startedAtRounded= [self.startedAt copy];
+    
+    NSTimeInterval newStartInterval;
+    NSTimeInterval startInterval= [self.startedAtRounded timeIntervalSinceReferenceDate];
+    NSTimeInterval          base= startInterval - ((NSInteger)startInterval % (minutes * 60));
+    newStartInterval= base + minutes * 60;
+    
+    self.startedAtRounded= [NSDate dateWithTimeIntervalSinceReferenceDate:newStartInterval];        
+}
+
+- (void)roundFinishedAtBy:(NSInteger)minutes {
+    
+    self.finishedAtRounded= [self.finishedAt copy];
+    
+    NSTimeInterval    endInterval= [self.finishedAtRounded timeIntervalSinceReferenceDate]; //  + (minutes * 60);
+    NSTimeInterval           base= endInterval - ((NSInteger)(endInterval) % (minutes * 60));
+    NSTimeInterval newEndInterval= base + minutes * 60;
+    self.finishedAtRounded= [NSDate dateWithTimeIntervalSinceReferenceDate:newEndInterval];        
+}
+
 - (BOOL)hasConnectivity {
     
-    return [self.project hasConnectivity];
+    return YES;
 }
 
 @end

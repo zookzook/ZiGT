@@ -75,11 +75,6 @@
 - (IBAction)noop:sender;
 
 /**
- * Aufzeichnung wird gestartet.
- */
-- (IBAction)startRecording:sender;
-
-/**
  * Aufzeichnung wird gestoppt.
  */
 - (IBAction)stopRecording:sender;

@@ -33,8 +33,7 @@
         return tempResult;
     }];
     
-    return result;
-    
+    return result;    
 }
 
 - (id)reverseTransformedValue:(id)value {
@@ -56,4 +55,5 @@
     } // for 
     return result;
 }
+
 @end

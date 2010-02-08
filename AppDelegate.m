@@ -138,6 +138,8 @@ typedef enum {
     [self stopRecording:self];
     [self.putTimer invalidate];
     
+    self.status.finishedNormaly= [NSNumber numberWithBool:YES];
+    
     [self.managedObjectContext commitEditing];
     [self.managedObjectContext save:&error];
     
@@ -171,6 +173,18 @@ typedef enum {
     
     [Task prepareStandardTasks:self.managedObjectContext];
     
+    if( ![self.status.finishedNormaly boolValue] ) {
+        
+        Entry* currentEntry= self.status.entry;
+        if( currentEntry ) {
+            
+            [self.managedObjectContext deleteObject:currentEntry];
+        } // if
+        
+    } // if 
+
+    self.status.finishedNormaly= [NSNumber numberWithBool:NO];
+
     [self saveAction:self];
 
     // ggfs. Password aus dem Keychain lesen
@@ -263,8 +277,16 @@ typedef enum {
             p.tag= [NSNumber numberWithInt:index];
             index+= 1;
         } // for 
-        
+                
         [self.managedObjectContext commitEditing];
+        
+        if( [self.status isRunning] ) {
+            
+            if( !self.status.entry ) {
+                [self.status stop];
+            } // if 
+        } // if 
+        
         [self saveAction:self];
 
         Account* acc= self.accountController.content;     
@@ -283,17 +305,6 @@ typedef enum {
     } // if
 }
 
-/**
- * Ein Fenster wird geöffnet.
- */
-- (void)windowDidBecomeKey:(NSNotification *)notification {
-    
-    // Ist es das Einstellungsfenster, dann müssen wir erstmal die Aufzeichnung beenden.
-    if( [notification object] == self.preferencesWindow ) {        
-        [self stopRecording:self];    
-    } // if 
-}
-
 #pragma mark MenuItem-Delegate
 /**
  * Aktualisierung des Status-Menüs. Wenn das Einstellungsfenster auf ist,
@@ -306,6 +317,19 @@ typedef enum {
     if( [self isWindowOpen] ) {
         
         result= [menuItem tag] == QUIT_TAG;
+
+        if( [menuItem tag] == STOPWATCH_TAG ) {
+            
+            if( [self.status isRunning]  ) {
+                
+                [menuItem setTitle: [self.status.entry timeIntervalDescription:nil]];
+            } // if 
+            else {
+                
+                [menuItem setTitle: NSLocalizedString( @"Durcation 00:00:00", @"StopWatch" )];                    
+            } // else 
+        } // if 
+        
     } // if 
     else {
         

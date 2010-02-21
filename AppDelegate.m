@@ -22,7 +22,7 @@
 @synthesize preferencesWindow, extraPanel, accountController, projectsController, statusItem, nameMenuField;
 @synthesize tableView, putTimer,  status, runningPutRequests, statusController, startedAt;
 @synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts, connectionProblems, proxyAccountsNotFound;
-@synthesize messageExpression, messageExpressionTemplates, highlightedMenuItem;
+@synthesize messageExpression, messageExpressionTemplates, highlightedMenuItem, hasConnectivity;
 
 static NSString *PropertyObservationContext;
 static NSString *ProxyAccountsObservationContext;
@@ -30,6 +30,7 @@ static NSString *StatusObservationContext;
 static NSString* CheckConnectionContext;
 static NSString* LoadProxyAccountsContext;
 static NSString* PutEntryContext;
+static NSString* HasConnectivityContext;
 
 typedef enum {
     
@@ -198,6 +199,7 @@ typedef enum {
     
     // Key-Value-Observing
     [self addObserver:self forKeyPath:@"status.state" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:&StatusObservationContext];
+    [self addObserver:self forKeyPath:@"hasConnectivity" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:&HasConnectivityContext];
     
     self.oldProxyAccounts= [NSMutableArray array];
     [self.proxyAccountsController addObserver:self forKeyPath:@"arrangedObjects" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:&ProxyAccountsObservationContext];
@@ -558,14 +560,20 @@ typedef enum {
 
 - (void)calendarsNotFound:(Propfind*)reportRequest {
         
-    if( reportRequest.context == &CheckConnectionContext )
+    if( reportRequest.context == &CheckConnectionContext ) {
+        
+        self.hasConnectivity= NO;
         [[self.connectionProblems animator] setAlphaValue:1];
+    }
 }
 
 - (void)calendarsFound:(Propfind*) reportRequest {
     
-    if( reportRequest.context == &CheckConnectionContext )
+    if( reportRequest.context == &CheckConnectionContext ) {
+        
+        self.hasConnectivity= YES;
         [[self.connectionProblems animator] setAlphaValue:0];
+    }
 }
 
 /**
@@ -772,14 +780,14 @@ typedef enum {
     if( [self.status isRunning] ) {
         
         [self.statusItem setTitle: @""];
-        [self.statusItem setImage: [self.status runningImage:NO]];
-        [self.statusItem setAlternateImage:[self.status runningImage:YES]];
+        [self.statusItem setImage: [self.status image:NO hasConnectivity:self.hasConnectivity]];
+        [self.statusItem setAlternateImage:[self.status image:YES hasConnectivity:self.hasConnectivity]];
     } // if
     else {
         
         [self.statusItem setTitle: @""];
-        [self.statusItem setImage: [NSImage imageNamed:@"zig_icon_statusleiste_stopped"]];
-        [self.statusItem setAlternateImage:nil];
+        [self.statusItem setImage: [NSImage imageNamed:@"statusmenu"]];
+        [self.statusItem setAlternateImage:[NSImage imageNamed:@"statusmenu_hl"]];
     } // else 
 }
 
@@ -815,6 +823,7 @@ typedef enum {
     } // if 
     
     [self.runningPutRequests removeObject:putRequest];    
+    self.hasConnectivity= YES;
 }
 
 /**
@@ -830,6 +839,7 @@ typedef enum {
     } // if 
     
     [self.runningPutRequests removeObject:putRequest];
+    self.hasConnectivity= NO;
 }
 
 /**
@@ -861,10 +871,11 @@ typedef enum {
         [Project syncCalendarsFromProxy:object managedObjectContext:self.managedObjectContext];
 	} // if 
     else
-    if( context == &StatusObservationContext ) {
+    if( context == &StatusObservationContext || context == &HasConnectivityContext ) {
 
         [self updateStatusBar];
     } // if 
+    
 }
 
 /**

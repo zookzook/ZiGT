@@ -69,6 +69,10 @@
         
         [self.delegate proxiesFound:self];
     }    
+    else {
+        [self.delegate proxiesNotFound:self];
+    }
+
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {

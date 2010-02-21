@@ -20,7 +20,6 @@ typedef enum {
 - (void)restart;
 - (void)stop;
 
-- (NSImage*)runningImage:(BOOL)highlighted;
-- (NSImage*)stoppedImage:(BOOL)highlighted;
+- (NSImage*)image:(BOOL)highlighted hasConnectivity:(BOOL)connectivity;
 
 @end

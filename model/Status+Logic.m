@@ -56,7 +56,8 @@
     self.state= [NSNumber numberWithInt:STOPPED];
 }
 
-- (NSImage*)image:(BOOL)highlighted {
+
+- (NSImage*)image:(BOOL)highlighted hasConnectivity:(BOOL)connectivity {
         
     float height  = 22.0;
     float space   = 3.0;
@@ -86,160 +87,80 @@
         
         NSSize msgSize = [text sizeWithAttributes:msgAttrs];
         
-        NSImage* taskImage= [self.entry.task menuItemImage];
+        NSImage* taskImage= [self.entry.task statusMenuItemImage];
         if( highlighted )
             taskImage= [self.entry.task highlightedMenuItemImage];
         
         NSRect fromRect= NSMakeRect( 0.0, 0.0, 0.0, 0.0 );
-        NSSize imageSize= NSMakeSize( msgSize.width + space + [taskImage size].width + space, height );
+        NSImage* disconnectedImage= [NSImage imageNamed:@"disconnected"];
+
+        
+        float width=  msgSize.width + space + [taskImage size].width + space;
+        if( !connectivity ) {            
+            width= [disconnectedImage size].width + space + msgSize.width + space + [taskImage size].width + space;
+        } // if 
+        
+        NSSize imageSize= NSMakeSize( width, height );
         result = [[NSImage alloc] initWithSize:imageSize];
         
         [result lockFocus];
+        float x= 0.0;
+        
+        if( !connectivity ) {
+            
+            fromRect.size= [disconnectedImage size];
+            [disconnectedImage drawAtPoint: NSMakePoint( x, floor( (height - [disconnectedImage size].height) / 2.0) )
+                                  fromRect: fromRect
+                                 operation: NSCompositeSourceOver
+                                  fraction: 1.0];                    
+        
+            x+= [disconnectedImage size].width + space;
+        } // if 
                 
         NSRect msgRect = NSMakeRect(0, 0, msgSize.width, msgSize.height);
-        msgRect.origin.x = 0.0;
+        msgRect.origin.x = x;
         msgRect.origin.y = ([result size].height - msgSize.height) / 2.0;
         
         [text drawInRect:msgRect withAttributes:msgAttrs];
         
+        x+=  msgSize.width + space;
         fromRect.size= [taskImage size];
                 
-        if( !highlighted ) {
-            
-            NSBitmapImageRep*     rep= (NSBitmapImageRep*)[taskImage bestRepresentationForRect:fromRect context:[NSGraphicsContext currentContext] hints:nil];    
-            CIImage*          ciImage= [[CIImage alloc] initWithBitmapImageRep: rep];        
-            CIFilter* colorMonochrome= [CIFilter filterWithName:@"CIColorMonochrome"];
-            CIColor*       blackColor= [CIColor colorWithString:@"0.0 0.0 0.0 1.0"];
-            
-            [colorMonochrome setDefaults];
-            [colorMonochrome setValue: ciImage forKey: @"inputImage"];
-            [colorMonochrome setValue: [NSNumber numberWithFloat: 1.0] forKey: @"inputIntensity"];
-            [colorMonochrome setValue: blackColor forKey: @"inputColor"];
-            
-            CIImage* outImage= [colorMonochrome valueForKey: @"outputImage"];
-            
-            [outImage drawAtPoint: NSMakePoint(msgSize.width + space, floor( (height - [taskImage size].height) / 2.0) )
-                         fromRect:  fromRect
-                        operation: NSCompositeSourceOver
-                         fraction: 1.0];
-            
-            [ciImage release];
+        if( NO) {
+
+            if( NO ) {
+                
+                NSBitmapImageRep*     rep= (NSBitmapImageRep*)[taskImage bestRepresentationForRect:fromRect context:[NSGraphicsContext currentContext] hints:nil];    
+                CIImage*          ciImage= [[CIImage alloc] initWithBitmapImageRep: rep];        
+                CIFilter* colorMonochrome= [CIFilter filterWithName:@"CIColorMonochrome"];
+                CIColor*       blackColor= [CIColor colorWithString:@"0.0 0.0 0.0 1.0"];
+                
+                [colorMonochrome setDefaults];
+                [colorMonochrome setValue: ciImage forKey: @"inputImage"];
+                [colorMonochrome setValue: [NSNumber numberWithFloat: 1.0] forKey: @"inputIntensity"];
+                [colorMonochrome setValue: blackColor forKey: @"inputColor"];
+                
+                CIImage* outImage= [colorMonochrome valueForKey: @"outputImage"];
+                
+                [outImage drawAtPoint: NSMakePoint(msgSize.width + space, floor( (height - [taskImage size].height) / 2.0) )
+                             fromRect:  fromRect
+                            operation: NSCompositeSourceOver
+                             fraction: 1.0];
+                
+                [ciImage release];
+            }
         } // 
-        else {
-            
-            [taskImage drawAtPoint: NSMakePoint( msgSize.width + space, floor( (height - [taskImage size].height) / 2.0) )
-                          fromRect:  fromRect
-                         operation: NSCompositeSourceOver
-                          fraction: 1.0];        
-        } // else
+
+        [taskImage drawAtPoint: NSMakePoint( x, floor( (height - [taskImage size].height) / 2.0) )
+                      fromRect:  fromRect
+                     operation: NSCompositeSourceOver
+                      fraction: 1.0];        
         
         [result unlockFocus];
         [result autorelease];
     } // if 
 
     return result;
-}
-
-
-- (NSImage*)image2:(BOOL)highlighted preImage:(NSImage*)preImage {
-    
-    float height  = 22.0;
-    float space   = 3.0;
-    float fontSize= 15.0;
-    
-    NSImage* result= nil;
-    
-    if( self.entry ) {
-        
-        NSString* text= self.entry.project.menuName;
-        
-        NSColor *textColor = [NSColor controlTextColor];
-        if( highlighted )
-            textColor= [NSColor selectedMenuItemTextColor];
-        
-        NSFont *msgFont = [NSFont menuBarFontOfSize:fontSize];
-        NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
-        [paraStyle setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
-        [paraStyle setAlignment:NSCenterTextAlignment];
-        [paraStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-        NSMutableDictionary *msgAttrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                         msgFont, NSFontAttributeName,
-                                         textColor, NSForegroundColorAttributeName,
-                                         paraStyle, NSParagraphStyleAttributeName,
-                                         nil];
-        [paraStyle release];
-        
-        NSSize msgSize = [text sizeWithAttributes:msgAttrs];
-        
-        NSImage* taskImage= [self.entry.task menuItemImage];
-        if( highlighted )
-            taskImage= [self.entry.task highlightedMenuItemImage];
-        
-        NSRect fromRect= NSMakeRect( 0.0, 0.0, 0.0, 0.0 );
-        NSSize imageSize= NSMakeSize( [preImage size].width + space + msgSize.width + space + [taskImage size].width, height );
-        result = [[NSImage alloc] initWithSize:imageSize];
-        
-        [result lockFocus];
-        
-        fromRect.size= [preImage size];
-        [preImage drawAtPoint: NSMakePoint(0.0, 0.0) fromRect:fromRect operation: NSCompositeSourceOver fraction: 1.0];
-        
-        NSRect msgRect = NSMakeRect(0, 0, msgSize.width, msgSize.height);
-        msgRect.origin.x = [preImage size].width + space;
-        msgRect.origin.y = ([result size].height - msgSize.height) / 2.0;
-        
-        [text drawInRect:msgRect withAttributes:msgAttrs];
-        
-        fromRect.size= [taskImage size];
-        
-        if( !highlighted ) {
-            
-            NSBitmapImageRep*     rep= (NSBitmapImageRep*)[taskImage bestRepresentationForRect:fromRect context:[NSGraphicsContext currentContext] hints:nil];    
-            CIImage*          ciImage= [[CIImage alloc] initWithBitmapImageRep: rep];        
-            CIFilter* colorMonochrome= [CIFilter filterWithName:@"CIColorMonochrome"];
-            CIColor*       blackColor= [CIColor colorWithString:@"0.0 0.0 0.0 1.0"];
-            
-            [colorMonochrome setDefaults];
-            [colorMonochrome setValue: ciImage forKey: @"inputImage"];
-            [colorMonochrome setValue: [NSNumber numberWithFloat: 1.0] forKey: @"inputIntensity"];
-            [colorMonochrome setValue: blackColor forKey: @"inputColor"];
-            
-            CIImage* outImage= [colorMonochrome valueForKey: @"outputImage"];
-            
-            NSLog( @"y:%f", floor( (height - [taskImage size].height) / 2.0 ) );
-            [outImage drawAtPoint: NSMakePoint([preImage size].width + space + msgSize.width + space, floor( (height - [taskImage size].height) / 2.0 ))
-                         fromRect:  fromRect
-                        operation: NSCompositeSourceOver
-                         fraction: 1.0];
-            
-            [ciImage release];
-        } // 
-        else {
-            
-            [taskImage drawAtPoint: NSMakePoint([preImage size].width + space + msgSize.width + space, floor( (height - [taskImage size].height) / 2.0) )
-                          fromRect:  fromRect
-                         operation: NSCompositeSourceOver
-                          fraction: 1.0];        
-        } // else
-        
-        [result unlockFocus];
-        [result autorelease];
-    } // if 
-    else {
-        result= preImage;
-    }
-    
-    return result;
-}
-
-- (NSImage*)runningImage:(BOOL)highlighted {
-    
-    return [self image:highlighted];
-}
-
-- (NSImage*)stoppedImage:(BOOL)highlighted {
-    
-    return [self image:highlighted preImage:[NSImage imageNamed:@"zig_icon_statusleiste_stopped"]];
 }
 
 

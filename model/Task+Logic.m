@@ -59,4 +59,10 @@
     return [NSImage imageNamed:[NSLocalizedString( self.name, @"" ) stringByAppendingString:@"_hi"]];
 }
 
+- (NSImage*)statusMenuItemImage {
+    
+    return [NSImage imageNamed:[NSLocalizedString( self.name, @"" ) stringByAppendingString:@"_black"]];
+}
+
+
 @end

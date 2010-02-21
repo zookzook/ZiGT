@@ -15,5 +15,6 @@
 
 - (NSImage*)menuItemImage;
 - (NSImage*)highlightedMenuItemImage;
+- (NSImage*)statusMenuItemImage;
 
 @end

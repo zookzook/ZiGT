@@ -86,6 +86,8 @@
         
         [self.delegate calendarsFound:self];
     }    
+    else
+        [self.delegate calendarsNotFound:self];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {

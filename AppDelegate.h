@@ -28,6 +28,7 @@
     NSTokenField                 *messageExpression;
     NSTokenField                 *messageExpressionTemplates;
     NSMenuItem                   *highlightedMenuItem;
+    BOOL                         hasConnectivity;
 }
 
 @property (nonatomic, retain) IBOutlet NSWindow                      *preferencesWindow;
@@ -54,6 +55,7 @@
 @property (nonatomic, retain)           NSDate                       *startedAt;
 @property (nonatomic, retain)           NSArray                      *oldProxyAccounts;
 @property (nonatomic, retain)           NSMenuItem                   *highlightedMenuItem;
+@property (nonatomic)                   BOOL                         hasConnectivity;
 
 - (IBAction)saveAction:sender;
 

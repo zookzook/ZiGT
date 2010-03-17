@@ -289,7 +289,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3F71203E11317DFD003A1D0A</string>
+						<string>3F71205011318099003A1D0A</string>
 						<key>history</key>
 						<array>
 							<string>3F9B0937112B16E200363A4D</string>
@@ -343,6 +343,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -393,13 +395,12 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>43</integer>
-									<integer>40</integer>
-									<integer>0</integer>
+									<integer>81</integer>
+									<integer>80</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 48}, {332, 984}}</string>
+							<string>{{0, 563}, {332, 984}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -429,8 +430,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -448,7 +447,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>3F71203D11317DFD003A1D0A</string>
+										<string>3F71204F11318099003A1D0A</string>
 										<key>history</key>
 										<array>
 											<string>3F5C78931100DA5B00911B06</string>
@@ -773,7 +772,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>288456189.60234898</real>
+	<real>288456857.00738698</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -790,15 +789,14 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>3F71203C11317DB3003A1D0A</string>
 		<string>3F71200D113179D0003A1D0A</string>
 		<string>3F71200E113179D0003A1D0A</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>3FD4D9801114AC2300133C25</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/maier/projects/ZiGT/ZiGT.xcodeproj</string>
 		<string>3F5C774711008E1D00911B06</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 	</array>
 	<key>WindowString</key>
 	<string>40 135 1880 1043 0 0 1920 1178 </string>
@@ -831,7 +829,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1651, 616}}</string>
 								<key>RubberWindowFrame</key>
-								<string>169 244 1651 898 0 0 1920 1178 </string>
+								<string>169 246 1651 898 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -857,7 +855,7 @@
 								<key>Frame</key>
 								<string>{{0, 621}, {1651, 236}}</string>
 								<key>RubberWindowFrame</key>
-								<string>169 244 1651 898 0 0 1920 1178 </string>
+								<string>169 246 1651 898 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
@@ -889,7 +887,7 @@
 			<key>WindowContentMinSize</key>
 			<string>486 300</string>
 			<key>WindowString</key>
-			<string>169 244 1651 898 0 0 1920 1178 </string>
+			<string>169 246 1651 898 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>3F5C774711008E1D00911B06</string>
 			<key>WindowToolIsVisible</key>

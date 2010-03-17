@@ -547,7 +547,7 @@
 				INFOPLIST_FILE = "ZiGT-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ZiGT;
-				PRODUCT_VERSION = 0.9.4;
+				PRODUCT_VERSION = 0.9.5;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -563,7 +563,7 @@
 				INFOPLIST_FILE = "ZiGT-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ZiGT;
-				PRODUCT_VERSION = 0.9.4;
+				PRODUCT_VERSION = 0.9.5;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

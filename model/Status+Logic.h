@@ -21,5 +21,6 @@ typedef enum {
 - (void)stop;
 
 - (NSImage*)image:(BOOL)highlighted hasConnectivity:(BOOL)connectivity;
+- (BOOL)hasAutostartProject;
 
 @end

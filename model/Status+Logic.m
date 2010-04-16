@@ -6,6 +6,11 @@
 
 @implementation Status( Logic )
 
++ (NSSet *)keyPathsForValuesAffectingHasAutostartProject {
+    
+    return [NSSet setWithObjects:@"autostartProject", nil];
+}
+
 - (void)awakeFromInsert {
     
     self.state= [NSNumber numberWithInt:STOPPED];
@@ -24,6 +29,11 @@
 - (Task*)currentTask {
     
     return self.entry.task;
+}
+
+- (BOOL)hasAutostartProject {
+    
+    return self.autostartProject != nil;
 }
 
 - (void)startProject:(Project *)newProject withTask:(Task*)newTask {

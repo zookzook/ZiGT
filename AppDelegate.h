@@ -2,6 +2,8 @@
 #import "Configs.h"
 
 @class Status;
+@class Project;
+@class Task;
 
 @interface AppDelegate : NSObject {
     
@@ -22,17 +24,21 @@
     Status                       *status;
     NSMutableSet                 *runningPutRequests;
     NSPanel                      *extraPanel;
+    NSPanel                      *projectChooserPanel;
     NSDate                       *startedAt;
     NSImageView                  *connectionProblems;
     NSImageView                  *proxyAccountsNotFound;
     NSTokenField                 *messageExpression;
     NSTokenField                 *messageExpressionTemplates;
     NSMenuItem                   *highlightedMenuItem;
+    Project                      *selectedProject;
+    Task                         *selectedTask;
     BOOL                         hasConnectivity;
 }
 
 @property (nonatomic, retain) IBOutlet NSWindow                      *preferencesWindow;
 @property (nonatomic, retain) IBOutlet NSPanel                       *extraPanel;
+@property (nonatomic, retain) IBOutlet NSPanel                       *projectChooserPanel;
 @property (nonatomic, retain) IBOutlet NSObjectController            *statusController;
 @property (nonatomic, retain) IBOutlet NSObjectController            *accountController;
 @property (nonatomic, retain) IBOutlet NSArrayController             *projectsController;
@@ -55,7 +61,14 @@
 @property (nonatomic, retain)           NSDate                       *startedAt;
 @property (nonatomic, retain)           NSArray                      *oldProxyAccounts;
 @property (nonatomic, retain)           NSMenuItem                   *highlightedMenuItem;
+@property (nonatomic, retain)           Project                      *selectedProject;
+@property (nonatomic, retain)           Task                         *selectedTask;
 @property (nonatomic)                   BOOL                         hasConnectivity;
+
+/**
+ * Starte ein Projekt.
+ */
+- (void)startProject:(Project*)theProject task:(Task*)theTask;
 
 - (IBAction)saveAction:sender;
 
@@ -133,6 +146,16 @@
 
 - (IBAction)cancelChange:(id)sender;
 
+/**
+ * Starte nun das Tracking nach expliziter Auswahl
+ */
+- (IBAction)startTracking:(id)sender;
+
+/**
+ * Es passiert nichts, der Anwender will noch nichts starten...
+ */
+- (IBAction)pauseTracking:(id)sender;
+    
 
 /**
  * Ist ein Fenster offen?

@@ -2,7 +2,7 @@
 //  Project.h
 //  ZiGT
 //
-//  Created by Michael Maier on 06.02.10.
+//  Created by Michael Maier on 16.04.10.
 //  Copyright 2010 VIVAI Software AG. All rights reserved.
 //
 
@@ -10,6 +10,7 @@
 
 @class Calendar;
 @class Entry;
+@class Status;
 
 @interface Project :  NSManagedObject  
 {
@@ -20,6 +21,7 @@
 @property (nonatomic, retain) NSString * menuName;
 @property (nonatomic, retain) NSString * messageExpression;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) Status * status;
 @property (nonatomic, retain) Calendar * calendar;
 @property (nonatomic, retain) NSSet* entries;
 

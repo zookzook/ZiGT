@@ -22,7 +22,8 @@
 @synthesize preferencesWindow, extraPanel, accountController, projectsController, statusItem, nameMenuField;
 @synthesize tableView, putTimer,  status, runningPutRequests, statusController, startedAt;
 @synthesize visibleCalendarsController, proxyAccountsController, oldProxyAccounts, connectionProblems, proxyAccountsNotFound;
-@synthesize messageExpression, messageExpressionTemplates, highlightedMenuItem, hasConnectivity;
+@synthesize messageExpression, messageExpressionTemplates, highlightedMenuItem, hasConnectivity, projectChooserPanel;
+@synthesize selectedProject, selectedTask;
 
 static NSString *PropertyObservationContext;
 static NSString *ProxyAccountsObservationContext;
@@ -216,6 +217,20 @@ typedef enum {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(menuDidSendAction:)
                                                  name:NSMenuDidSendActionNotification object:nil];
+    
+    if( self.status.autostart ) {
+        
+        if( self.status.autostartProject && self.status.autostartTask ) {
+            
+            [self startProject:self.status.autostartProject task:self.status.autostartTask];
+        } // if 
+        else {
+            
+            NSArray* projects= [Project projectsContext:self.managedObjectContext];
+            if( [projects count] > 0 )
+                [NSTimer scheduledTimerWithTimeInterval:5*60 target:self selector:@selector(chooseProject:) userInfo:nil repeats:NO];
+        }
+    }
 }
 
 #pragma mark TabView-Delegate
@@ -515,16 +530,25 @@ typedef enum {
     [self stopRecording:self];
     
     if( sender ) {
-        
+                
         Task* t= [(NSMenuItem*)sender representedObject];
         Project* p= [[(NSMenuItem*)sender parentItem] representedObject];
-        if( p ) {
-            
-            self.startedAt= [NSDate date];
-            [self.status startProject:p withTask:t];
-            [self saveAction:self];
+        if( p ) {            
+            [self startProject:p task:t];
         } // if 
     }
+}
+
+- (void)startProject:(Project*)theProject task:(Task*)theTask {
+    
+    if( !self.hasConnectivity ) {            
+        [self checkConnection:self];
+    }
+    
+    self.startedAt= [NSDate date];
+    [self.status startProject:theProject withTask:theTask];
+        
+    [self saveAction:self];
 }
 
 - (IBAction)editExtras:(id)sender {
@@ -545,6 +569,41 @@ typedef enum {
     
     [self.extraPanel close];
     [self.managedObjectContext rollback];
+}
+
+/**
+ * Nach fünf Minuten wird an dieser Stelle gefragt, ob 
+ */
+- (void)chooseProject:(NSTimer*)timer {
+    
+    if( ![self.status isRunning] && self.status.autostart && ![self isWindowOpen]) {
+                
+        self.selectedTask   = self.status.autostartTask;
+        self.selectedProject= self.status.autostartProject;
+        
+        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+        [self.projectChooserPanel center];
+        [self.projectChooserPanel makeKeyAndOrderFront:self];
+        [[NSApplication sharedApplication] arrangeInFront:self];
+        
+    } // if 
+}
+
+- (IBAction)startTracking:(id)sender {
+    
+    [self.projectChooserPanel close];
+    [self startProject:self.selectedProject task:self.selectedTask];
+    
+    self.selectedProject= nil;
+    self.selectedTask   = nil;
+}
+
+- (IBAction)pauseTracking:(id)sender {
+    
+    [self.projectChooserPanel close];
+    
+    self.selectedProject= nil;
+    self.selectedTask   = nil;
 }
 
 /**
@@ -769,7 +828,7 @@ typedef enum {
  */
 - (BOOL)isWindowOpen {
     
-    return [self.preferencesWindow isVisible] || [self.extraPanel isVisible];
+    return [self.preferencesWindow isVisible] || [self.extraPanel isVisible] || [self.projectChooserPanel isVisible];
 }
 
 /**
@@ -1003,6 +1062,7 @@ typedef enum {
     self.preferencesWindow         = nil;    
     self.runningPutRequests        = nil;
     self.extraPanel                = nil;
+    self.projectChooserPanel       = nil;
     self.accountController         = nil;
     self.projectsController        = nil;
     self.visibleCalendarsController= nil;
@@ -1016,6 +1076,8 @@ typedef enum {
     self.connectionProblems        = nil;
     self.messageExpression         = nil;
     self.highlightedMenuItem       = nil;
+    self.selectedTask              = nil;
+    self.selectedProject           = nil;
     
     [super dealloc];
 }

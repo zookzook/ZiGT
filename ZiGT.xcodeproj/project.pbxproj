@@ -26,7 +26,6 @@
 		3F8138B311162B72001B4C61 /* MessageTokenTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8138B211162B72001B4C61 /* MessageTokenTransformer.m */; };
 		3F81E198110CAC5900352111 /* HTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F81E197110CAC5900352111 /* HTTPRequest.m */; };
 		3F86CAA911063EFC002EA155 /* Project+Logic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F86CAA811063EFC002EA155 /* Project+Logic.m */; };
-		3F9B091A112AFACC00363A4D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F9B0919112AFACC00363A4D /* MainMenu.xib */; };
 		3F9DADFE1123E6A000B90A00 /* disconnected.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9DADFB1123E6A000B90A00 /* disconnected.png */; };
 		3F9DAE081123E75800B90A00 /* analysis_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9DAE051123E75800B90A00 /* analysis_black.png */; };
 		3F9DAE091123E75800B90A00 /* analysis_hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9DAE061123E75800B90A00 /* analysis_hi.png */; };
@@ -58,6 +57,7 @@
 		3FAA1773110E14AE00693A3B /* Report.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAA1772110E14AE00693A3B /* Report.m */; };
 		3FAA17A7110E200500693A3B /* NSArray+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAA17A6110E200500693A3B /* NSArray+Utils.m */; };
 		3FBE3248110C797B0006BDFE /* Propfind.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBE3247110C797B0006BDFE /* Propfind.m */; };
+		3FC2D0551178717B00F3EE44 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FC2D0531178717B00F3EE44 /* MainMenu.xib */; };
 		3FD4D8D9111485F500133C25 /* Todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3FD4D8D8111485F500133C25 /* Todo.txt */; };
 		3FFF4F84110643050045F2B1 /* Entry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF4F81110643050045F2B1 /* Entry.m */; };
 		3FFF4F85110643050045F2B1 /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF4F83110643050045F2B1 /* Project.m */; };
@@ -76,7 +76,6 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		2F7446980DB6B7EA00F9684A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* ZiGT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZiGT_Prefix.pch; sourceTree = "<group>"; };
 		3F4AC22A1107262900BCADA7 /* Put.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Put.h; path = network/Put.h; sourceTree = "<group>"; };
 		3F4AC22B1107262900BCADA7 /* Put.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Put.m; path = network/Put.m; sourceTree = "<group>"; };
@@ -111,7 +110,6 @@
 		3F81E197110CAC5900352111 /* HTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTTPRequest.m; path = network/HTTPRequest.m; sourceTree = "<group>"; };
 		3F86CAA711063EFC002EA155 /* Project+Logic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Project+Logic.h"; path = "model/Project+Logic.h"; sourceTree = "<group>"; };
 		3F86CAA811063EFC002EA155 /* Project+Logic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Project+Logic.m"; path = "model/Project+Logic.m"; sourceTree = "<group>"; };
-		3F9B091D112AFB0E00363A4D /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3F9DADFB1123E6A000B90A00 /* disconnected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = disconnected.png; path = images/disconnected.png; sourceTree = "<group>"; };
 		3F9DAE051123E75800B90A00 /* analysis_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = analysis_black.png; path = images/icons/analysis_black.png; sourceTree = "<group>"; };
 		3F9DAE061123E75800B90A00 /* analysis_hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = analysis_hi.png; path = images/icons/analysis_hi.png; sourceTree = "<group>"; };
@@ -153,6 +151,8 @@
 		3FAA17A6110E200500693A3B /* NSArray+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Utils.m"; path = "utils/NSArray+Utils.m"; sourceTree = "<group>"; };
 		3FBE3246110C797B0006BDFE /* Propfind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Propfind.h; path = network/Propfind.h; sourceTree = "<group>"; };
 		3FBE3247110C797B0006BDFE /* Propfind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Propfind.m; path = network/Propfind.m; sourceTree = "<group>"; };
+		3FC2D0541178717B00F3EE44 /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		3FC2D0561178718D00F3EE44 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3FD4D8D8111485F500133C25 /* Todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Todo.txt; sourceTree = "<group>"; };
 		3FFF4F80110643050045F2B1 /* Entry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Entry.h; path = model/Entry.h; sourceTree = "<group>"; };
 		3FFF4F81110643050045F2B1 /* Entry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Entry.m; path = model/Entry.m; sourceTree = "<group>"; };
@@ -254,12 +254,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3FC2D0531178717B00F3EE44 /* MainMenu.xib */,
 				3F80E1EA110F60490099DBD5 /* zigt.icns */,
 				3F76186D110B433200EC5476 /* Localizable.strings */,
 				3F6ED2A011022DCF00911536 /* Images */,
 				8D1107310486CEB800E47090 /* ZiGT-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				3F9B0919112AFACC00363A4D /* MainMenu.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -429,7 +429,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				3F9B091A112AFACC00363A4D /* MainMenu.xib in Resources */,
 				3F76186F110B433200EC5476 /* Localizable.strings in Resources */,
 				3F80E1EB110F60490099DBD5 /* zigt.icns in Resources */,
 				3FD4D8D9111485F500133C25 /* Todo.txt in Resources */,
@@ -456,6 +455,7 @@
 				3F9DAE431123E97A00B90A00 /* testing.png in Resources */,
 				3F9DAE801123F12B00B90A00 /* statusmenu_hl.png in Resources */,
 				3F9DAE811123F12B00B90A00 /* statusmenu.png in Resources */,
+				3FC2D0551178717B00F3EE44 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,11 +519,11 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		3F9B0919112AFACC00363A4D /* MainMenu.xib */ = {
+		3FC2D0531178717B00F3EE44 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2F7446980DB6B7EA00F9684A /* English */,
-				3F9B091D112AFB0E00363A4D /* German */,
+				3FC2D0561178718D00F3EE44 /* English */,
+				3FC2D0541178717B00F3EE44 /* German */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -547,7 +547,7 @@
 				INFOPLIST_FILE = "ZiGT-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ZiGT;
-				PRODUCT_VERSION = 0.9.5;
+				PRODUCT_VERSION = 0.9.6;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -563,7 +563,7 @@
 				INFOPLIST_FILE = "ZiGT-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ZiGT;
-				PRODUCT_VERSION = 0.9.5;
+				PRODUCT_VERSION = 0.9.6;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -56,8 +56,14 @@
     if( !now )
         now= [NSDate date];                        
     
-    NSTimeInterval diffTime= [now timeIntervalSinceReferenceDate] - [self.startedAt timeIntervalSinceReferenceDate] - [[NSTimeZone defaultTimeZone] secondsFromGMT];
-    NSDate*           diffDate= [NSDate dateWithTimeIntervalSinceReferenceDate:diffTime];            
+    NSTimeZone* timeZone= [NSTimeZone localTimeZone];
+    NSTimeInterval diffTime= [now timeIntervalSinceDate:self.startedAt];
+    if( [timeZone isDaylightSavingTime] ) {
+        
+        diffTime-= [timeZone daylightSavingTimeOffset];
+    }
+    
+    NSDate*           diffDate= [NSDate dateWithTimeIntervalSinceReferenceDate:diffTime];
     return [NSString stringWithFormat:NSLocalizedString( @"Duration %@", @"StopWatch" ), [_formatter stringFromDate:diffDate]];
 }
 

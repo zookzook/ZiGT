@@ -41,8 +41,6 @@
         
         NSXMLDocument* xmlDoc= [[[NSXMLDocument alloc] initWithData:self.data options:NSXMLNodePreserveAll error:&err] autorelease];
         xmlDoc= [xmlDoc fix];
-        
-        NSLog( @"%@", xmlDoc );
         NSArray *nodes = [xmlDoc nodesForXPath:@"//calendar-proxy-write-for//response" error:&err];
         for( NSXMLNode* responseNode in nodes ) {
             

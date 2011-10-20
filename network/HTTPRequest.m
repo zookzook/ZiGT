@@ -65,8 +65,8 @@
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
     
-    NSLog( @"%@", [redirectResponse allHeaderFields] );
-    NSLog( @"%@", [request HTTPMethod] );
+    // NSLog( @"%@", [(NSHTTPURLResponse*)redirectResponse allHeaderFields] );
+    // NSLog( @"%@", [request HTTPMethod] );
     return request;
 }
 
